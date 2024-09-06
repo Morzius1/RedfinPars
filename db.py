@@ -1,5 +1,5 @@
 import psycopg2
-from config222 import host,password,user,db_name
+from config import host,password,user,db_name
 from datetime import datetime,timedelta
 
 
