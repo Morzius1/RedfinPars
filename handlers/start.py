@@ -19,8 +19,8 @@ async def cmd_start(message: Message):
 
 async def cmd_start1(message:Message):
     doc=FSInputFile(path=os.path.join(all_excel_files,f'Отчёт_на_{datetime.date(datetime.now())}.xlsx'))
-    await bot.send_document(635530835,document=doc)
-    await bot.send_message(635530835,'Получите файл!')
+    await bot.send_document("Здесь ваш ID",document=doc)
+    await bot.send_message("Здесь ваш ID",'Получите файл!')
 
 class Form(StatesGroup):
     url=State()
