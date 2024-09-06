@@ -1,6 +1,7 @@
 import psycopg2
-from config import host,password,user,db_name
+from config222 import host,password,user,db_name
 from datetime import datetime,timedelta
+
 
 
 def create_table():
@@ -54,9 +55,6 @@ def create_table():
 #                 );
 #                 create unique index duplicate on info_flats(url);
 
- 
-
-
 
 def get_urls(url,date):
     try:
@@ -84,7 +82,7 @@ def get_urls(url,date):
         if connection:
             connection.close()
             
-def vstavka1(url,status,price,date,descr,year):
+def vstavka_in_info_flats(url,status,price,date,descr,year):
     try:
         connection=psycopg2.connect(
             host=host,
@@ -102,7 +100,6 @@ def vstavka1(url,status,price,date,descr,year):
                 (%s,%s,%s,%s,%s,%s);""",
                 (url,status,price, date,descr,year,) 
             )
-            # (%s,%s,%d,SELECT DATE (CURRENT_DATE - interval " %s ") ,%s,%s);""",
         print('Данные успешно вставлены')
     except Exception as ex:
         print('Произошла ошибка',ex)
@@ -111,46 +108,6 @@ def vstavka1(url,status,price,date,descr,year):
         if connection:
             connection.close()
 
-def delete_table():
-    try:
-        connection=psycopg2.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=db_name
-        )
-        connection.autocommit=True
-        with connection.cursor() as cursor:
-            cursor.execute(
-            """DROP TABLE info_flats;""")
-        print('Таблица удалена')
-    except Exception as ex:
-        print(ex)
-    finally:
-        if connection:
-            connection.close()
-        
-def clear_table():
-    try:
-        connection=psycopg2.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=db_name
-        )
-        connection.autocommit=True
-        with connection.cursor() as cursor:
-            cursor.execute(
-                """DELETE FROM urls""",
-            )
-        print('Таблица очищена')
-    except Exception as ex:
-        print('Произошла ошибка',ex)
-
-    finally:
-        if connection:
-            connection.close() 
-            
 
 
 
@@ -196,7 +153,7 @@ def select_from_info_flats():
                 f"""
                     SELECT url,status,price,descr,year 
                     FROM info_flats 
-                    where CURRENT_DATE-date<=1
+                    where CURRENT_DATE-date=0
                     order by year DESC, price asc
                 """
             )
@@ -209,4 +166,4 @@ def select_from_info_flats():
         if connection:
             connection.close()
 
-clear_table()
+# clear_table()

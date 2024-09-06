@@ -1,17 +1,10 @@
-from seleniumbase import Driver, BaseCase
 import time
 import itertools
-from seleniumbase import BaseCase,SB
-from db import get_urls,select_urls,vstavka1
-import lxml
-import random
-from selenium.common.exceptions import  StaleElementReferenceException as Stale_Exception
+from seleniumbase import SB
+from db import get_urls,select_urls,vstavka_in_info_flats
 from datetime import datetime,timedelta
 
-lst=['Yqnhp8:8Fh2Bq@147.45.122.60:9576',
-    'vyagHY:JSb6Tr@5.8.12.244:9248']
-
-
+# В данном примере поиск осуществляется без применения Proxy, при добавлении прокси необходимо к SB применить параметр Proxy.
 
 def take_url_in_db():
     with SB( sjw=True,pls='none',uc=True) as sb:
@@ -41,13 +34,10 @@ def take_url_in_db():
                         get_urls(k,date_res1)
                         print('Данные успешно вставлены, переход на следующую страницу.')
                 else:
-                    continue 
-            print(z)       
+                    continue       
 
 def take_info_about_flats():
     with SB( sjw=True,pls='none',uc=True,headless=True) as sb:
-        # sb.open('https://www.redfin.com/')
-        # sb.load_cookies(name='test_case.txt')
         for i in select_urls():
             try:
                 sb.open(f"{i[1]}")
@@ -68,23 +58,14 @@ def take_info_about_flats():
                     str(date_res),
                     str(descr.text),
                     str(year[2].text.split(' ')[-1]))
-                vstavka1(str(i[1]),str(status.text),int(price),date_res,str(descr.text),str(year[2].text.split(' ')[-1]))
+                vstavka_in_info_flats(str(i[1]),str(status.text),int(price),date_res,str(descr.text),str(year[2].text.split(' ')[-1]))
                 time.sleep(7)
-            except Stale_Exception as s:
-                print('Произошла ошибка',s)
-                continue
             except Exception as ex:
-                print('warn',ex)
-
-take_info_about_flats()
+                print('Произошла ошибка:',ex)
 
 def take_info_about_select_url(url):
     with SB( sjw=True,pls='none',uc=True,headless=True) as sb:
-        # sb.open('https://www.redfin.com/')
-        # sb.load_cookies(name='test_case.txt')
-        # try:
         sb.open(url)
-        time.sleep(5)
         status=sb.find_element('span[class="bp-DefinitionFlyout bp-DefinitionFlyout__underline"]')
         price=sb.find_element('div[class="statsValue"]').text[1:]
         price=price.replace(',','')
@@ -99,11 +80,5 @@ def take_info_about_select_url(url):
             str(descr.text),
             str(year[2].text.split(' ')[-1]))
         get_urls(str(url),date_res)
-        time.sleep(2)
-        vstavka1(str(url),str(status.text),int(price),date_res,str(descr.text),str(year[2].text.split(' ')[-1]))
-        # except Stale_Exception() as ex:
-        #     print("Произошла ошибочка, сайт испуган",ex)
-            
-
-# for i in select_urls():
-#     print(i)
+        time.sleep(1)
+        vstavka_in_info_flats(str(url),str(status.text),int(price),date_res,str(descr.text),str(year[2].text.split(' ')[-1]))

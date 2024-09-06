@@ -1,18 +1,13 @@
 from openpyxl import Workbook
-from db import select_from_info_flats
-from datetime import datetime
 import os
-import pandas as pd
-import xlsxwriter
-from openpyxl.styles import Border, Side, Color, PatternFill, Font, Alignment, NamedStyle
 
 
 
 def excel_file(dict_list:list,output_filename:str,sheet_name:str='Flats'):
-    if not os.path.exists('aiograminfo\\excel_files'):
-        os.makedirs('aiograminfo\\excel_files')
+    if not os.path.exists('excel_files'):
+        os.makedirs('excel_files')
 
-    filepath=os.path.join('aiograminfo\\excel_files',output_filename)
+    filepath=os.path.join('excel_files',output_filename)
     
     wb=Workbook()
     ws=wb.active
@@ -37,4 +32,4 @@ def excel_file(dict_list:list,output_filename:str,sheet_name:str='Flats'):
     wb.save(filepath)
     return filepath
 
-excel_file(select_from_info_flats(),output_filename='test2.xlsx')
+# excel_file(select_from_info_flats(),output_filename='test2.xlsx')

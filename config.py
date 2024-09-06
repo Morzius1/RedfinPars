@@ -1,4 +1,5 @@
-host='localhost'
-user='postgres'
-password='root'
-db_name='ringer'
+#Укажите свои данные для подключения к БД
+host='host_name'
+user='user'
+password='pass'
+db_name='db_name'
